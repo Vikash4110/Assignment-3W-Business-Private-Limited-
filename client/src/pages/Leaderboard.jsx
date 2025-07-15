@@ -1,4 +1,3 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import LeaderboardTable from "../components/leaderboard/LeaderboardTable";
 
@@ -8,10 +7,12 @@ const Leaderboard = () => {
   useEffect(() => {
     const fetchLeaderboard = async () => {
       try {
-        const response = await axios.get(
+        const response = await fetch(
           "http://localhost:5000/api/users/leaderboard"
         );
-        setLeaderboard(response.data);
+        if (!response.ok) throw new Error("Failed to fetch leaderboard");
+        const data = await response.json();
+        setLeaderboard(data);
       } catch (error) {
         console.error("Error fetching leaderboard:", error);
       }

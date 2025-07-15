@@ -1,10 +1,18 @@
-import axios from "axios";
 import React from "react";
 import AddUserForm from "../components/user/AddUserForm";
 
 const AddUser = () => {
   const handleAddUser = async (name) => {
-    await axios.post("http://localhost:5000/api/users/add", { name });
+    try {
+      const response = await fetch("http://localhost:5000/api/users/add", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name }),
+      });
+      if (!response.ok) throw new Error("Failed to add user");
+    } catch (error) {
+      throw error;
+    }
   };
 
   return (

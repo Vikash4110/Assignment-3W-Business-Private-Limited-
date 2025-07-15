@@ -1,6 +1,5 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
-import Alert from "../common/Alert";
+import Alert from "../components/common/Alert";
 import UserSelector from "../components/leaderboard/UserSelector";
 import ClaimButton from "../components/user/ClaimButton";
 
@@ -13,7 +12,9 @@ const Home = () => {
   useEffect(() => {
     const initialize = async () => {
       try {
-        await axios.get("http://localhost:5000/api/users/initialize");
+        await fetch("http://localhost:5000/api/users/initialize", {
+          method: "GET",
+        });
         fetchUsers();
       } catch (error) {
         setMessage("Error initializing users");
@@ -25,12 +26,14 @@ const Home = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await axios.get(
+      const response = await fetch(
         "http://localhost:5000/api/users/leaderboard"
       );
-      setUsers(response.data);
-      if (response.data.length > 0) {
-        setSelectedUser(response.data[0].id);
+      if (!response.ok) throw new Error("Failed to fetch users");
+      const data = await response.json();
+      setUsers(data);
+      if (data.length > 0) {
+        setSelectedUser(data[0].id);
       }
     } catch (error) {
       setMessage("Error fetching users");
@@ -45,13 +48,14 @@ const Home = () => {
       return;
     }
     try {
-      const response = await axios.post(
-        "http://localhost:5000/api/users/claim",
-        { userId: selectedUser }
-      );
-      setMessage(
-        `Claimed ${response.data.points} points for ${response.data.user.name}`
-      );
+      const response = await fetch("http://localhost:5000/api/users/claim", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId: selectedUser }),
+      });
+      if (!response.ok) throw new Error("Failed to claim points");
+      const data = await response.json();
+      setMessage(`Claimed ${data.points} points for ${data.user.name}`);
       setMessageType("success");
       setTimeout(() => setMessage(""), 3000);
     } catch (error) {

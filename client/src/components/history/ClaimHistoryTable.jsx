@@ -1,4 +1,3 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 
 const ClaimHistoryTable = () => {
@@ -7,10 +6,10 @@ const ClaimHistoryTable = () => {
   useEffect(() => {
     const fetchHistory = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:5000/api/users/history"
-        );
-        setHistory(response.data);
+        const response = await fetch("http://localhost:5000/api/users/history");
+        if (!response.ok) throw new Error("Failed to fetch history");
+        const data = await response.json();
+        setHistory(data);
       } catch (error) {
         console.error("Error fetching history:", error);
       }
