@@ -12,7 +12,7 @@ const Home = () => {
   useEffect(() => {
     const initialize = async () => {
       try {
-        await fetch("http://localhost:5000/api/users/initialize", {
+        await fetch("http://localhost:8000/api/users/initialize", {
           method: "GET",
         });
         fetchUsers();
@@ -27,7 +27,7 @@ const Home = () => {
   const fetchUsers = async () => {
     try {
       const response = await fetch(
-        "http://localhost:5000/api/users/leaderboard"
+        "http://localhost:8000/api/users/leaderboard"
       );
       if (!response.ok) throw new Error("Failed to fetch users");
       const data = await response.json();
@@ -48,7 +48,7 @@ const Home = () => {
       return;
     }
     try {
-      const response = await fetch("http://localhost:5000/api/users/claim", {
+      const response = await fetch("http://localhost:8000/api/users/claim", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userId: selectedUser }),

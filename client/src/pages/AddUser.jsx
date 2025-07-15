@@ -4,7 +4,7 @@ import AddUserForm from "../components/user/AddUserForm";
 const AddUser = () => {
   const handleAddUser = async (name) => {
     try {
-      const response = await fetch("http://localhost:5000/api/users/add", {
+      const response = await fetch("http://localhost:8000/api/users/add", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name }),
